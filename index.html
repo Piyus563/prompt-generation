@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Assistant</title>
-    <!-- Markdown renderer -->
+    <title>AI Assistant — Free AI Chat</title>
+    <meta name="description" content="Type any prompt and get an instant, beautifully formatted AI response. Free, no API key needed.">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <style>
@@ -38,9 +37,9 @@
             align-items: center;
             padding: 2rem 1rem 4rem;
             background-image:
-                radial-gradient(ellipse at 15% 10%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 60%);
+                radial-gradient(ellipse at 15% 10%, rgba(99,102,241,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 90%, rgba(139,92,246,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(34,211,238,0.05) 0%, transparent 60%);
         }
 
         /* ── Header ── */
@@ -100,7 +99,7 @@
 
         /* ── Status Banner ── */
         .status-banner {
-            display: flex;
+            display: none;
             align-items: center;
             gap: 10px;
             padding: 0.9rem 1.2rem;
@@ -110,6 +109,7 @@
             margin-bottom: 1.8rem;
             animation: slideDown 0.3s ease;
         }
+        .status-banner.show { display: flex; }
         .status-banner.success { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
         .status-banner.warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #fbbf24; }
         .status-banner.error   { background: rgba(244,63,94,0.12);  border: 1px solid rgba(244,63,94,0.3);  color: #fb7185; }
@@ -129,8 +129,8 @@
             width: 100%;
             min-height: 130px;
             padding: 1.2rem 1.4rem;
-            background: rgba(8, 12, 24, 0.85);
-            border: 1px solid rgba(99, 102, 241, 0.25);
+            background: rgba(8,12,24,0.85);
+            border: 1px solid rgba(99,102,241,0.25);
             border-radius: 16px;
             color: var(--text);
             font-family: 'Inter', sans-serif;
@@ -144,16 +144,12 @@
         textarea:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.1);
+            box-shadow: 0 0 0 4px rgba(34,211,238,0.1);
         }
         textarea::placeholder { color: #3d4f6b; }
 
         /* ── Buttons ── */
-        .btn-row {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1.2rem;
-        }
+        .btn-row { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
 
         .btn-send {
             flex: 1;
@@ -173,11 +169,7 @@
             transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
             box-shadow: 0 8px 25px -8px var(--primary-glow);
         }
-
-        .btn-send:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 30px -8px var(--primary-glow);
-        }
+        .btn-send:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 30px -8px var(--primary-glow); }
         .btn-send:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .btn-clear {
@@ -210,8 +202,8 @@
         .suggestions-label { width: 100%; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.2rem; }
         .chip {
             padding: 0.45rem 1rem;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.2);
             border-radius: 50px;
             font-size: 0.82rem;
             color: #a5b4fc;
@@ -219,17 +211,13 @@
             transition: all 0.2s;
             white-space: nowrap;
         }
-        .chip:hover { background: rgba(99, 102, 241, 0.25); border-color: var(--primary); color: white; transform: translateY(-1px); }
+        .chip:hover { background: rgba(99,102,241,0.25); border-color: var(--primary); color: white; transform: translateY(-1px); }
 
         /* ── Output Section ── */
-        .output-section { margin-top: 2.5rem; animation: fadeUp 0.5s ease; }
+        .output-section { margin-top: 2.5rem; animation: fadeUp 0.5s ease; display: none; }
+        .output-section.show { display: block; }
 
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 
         .output-label {
             font-size: 0.82rem;
@@ -241,7 +229,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .output-label::before {
             content: '';
             width: 8px; height: 8px;
@@ -255,8 +242,8 @@
             align-items: center;
             gap: 6px;
             padding: 0.5rem 1rem;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.35);
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.35);
             border-radius: 8px;
             color: #a5b4fc;
             font-family: 'Inter', sans-serif;
@@ -267,9 +254,9 @@
         }
         .copy-btn:hover { background: var(--primary); color: white; }
 
-        /* ── Markdown Output Box ── */
+        /* ── Output Box & Markdown ── */
         .output-box {
-            background: rgba(8, 12, 24, 0.75);
+            background: rgba(8,12,24,0.75);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 2rem 2.2rem;
@@ -284,126 +271,68 @@
         .output-box::-webkit-scrollbar-track { background: transparent; }
         .output-box::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-        /* ── Rendered Markdown Styles ── */
-        .output-box h1,
-        .output-box h2,
-        .output-box h3,
-        .output-box h4 {
-            color: #e2e8f0;
-            font-weight: 700;
-            margin: 1.4rem 0 0.6rem;
-            line-height: 1.3;
+        .output-box h1, .output-box h2, .output-box h3, .output-box h4 {
+            color: #e2e8f0; font-weight: 700; margin: 1.4rem 0 0.6rem; line-height: 1.3;
         }
         .output-box h1 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
         .output-box h2 { font-size: 1.25rem; }
         .output-box h3 { font-size: 1.1rem; color: #a5b4fc; }
         .output-box h4 { font-size: 1rem; color: #94a3b8; }
-
-        .output-box p {
-            margin: 0.7rem 0;
-            color: #cbd5e1;
-        }
-
+        .output-box p { margin: 0.7rem 0; color: #cbd5e1; }
         .output-box strong { color: #f1f5f9; font-weight: 700; }
         .output-box em { color: #a5b4fc; font-style: italic; }
-
-        .output-box ul, .output-box ol {
-            padding-left: 1.5rem;
-            margin: 0.7rem 0;
-        }
-        .output-box li {
-            margin: 0.4rem 0;
-            color: #cbd5e1;
-        }
+        .output-box ul, .output-box ol { padding-left: 1.5rem; margin: 0.7rem 0; }
+        .output-box li { margin: 0.4rem 0; color: #cbd5e1; }
         .output-box li::marker { color: var(--accent); }
-
         .output-box blockquote {
-            border-left: 3px solid var(--primary);
-            padding: 0.6rem 1rem;
-            margin: 1rem 0;
-            background: rgba(99, 102, 241, 0.08);
-            border-radius: 0 8px 8px 0;
-            color: #94a3b8;
-            font-style: italic;
+            border-left: 3px solid var(--primary); padding: 0.6rem 1rem; margin: 1rem 0;
+            background: rgba(99,102,241,0.08); border-radius: 0 8px 8px 0; color: #94a3b8; font-style: italic;
         }
-
-        /* Inline code */
         .output-box code {
-            background: rgba(99, 102, 241, 0.15);
-            color: #c4b5fd;
-            padding: 0.15rem 0.45rem;
-            border-radius: 5px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.88rem;
+            background: rgba(99,102,241,0.15); color: #c4b5fd;
+            padding: 0.15rem 0.45rem; border-radius: 5px;
+            font-family: 'Fira Code', monospace; font-size: 0.88rem;
         }
-
-        /* Code blocks (overridden by highlight.js) */
         .output-box pre {
-            background: #1e2030 !important;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 1.2rem 1.5rem;
-            margin: 1rem 0;
-            overflow-x: auto;
-            position: relative;
+            background: #1e2030 !important; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 1.2rem 1.5rem; margin: 1rem 0;
+            overflow-x: auto; position: relative;
         }
-
-        .output-box pre code {
-            background: transparent !important;
-            color: inherit;
-            padding: 0;
-            font-size: 0.88rem;
-            line-height: 1.7;
-        }
-
-        /* Code block language label */
+        .output-box pre code { background: transparent !important; color: inherit; padding: 0; font-size: 0.88rem; line-height: 1.7; }
         .output-box pre::before {
-            content: attr(data-lang);
-            position: absolute;
-            top: 0.5rem;
-            right: 0.8rem;
-            font-size: 0.72rem;
-            color: #4b5563;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            content: attr(data-lang); position: absolute; top: 0.5rem; right: 0.8rem;
+            font-size: 0.72rem; color: #4b5563; font-family: 'Inter', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-
-        .output-box table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-        .output-box th {
-            background: rgba(99, 102, 241, 0.15);
-            color: #a5b4fc;
-            padding: 0.7rem 1rem;
-            text-align: left;
-            border: 1px solid var(--border);
-            font-weight: 600;
-        }
-        .output-box td {
-            padding: 0.6rem 1rem;
-            border: 1px solid var(--border);
-            color: #cbd5e1;
-        }
+        .output-box table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .output-box th { background: rgba(99,102,241,0.15); color: #a5b4fc; padding: 0.7rem 1rem; text-align: left; border: 1px solid var(--border); font-weight: 600; }
+        .output-box td { padding: 0.6rem 1rem; border: 1px solid var(--border); color: #cbd5e1; }
         .output-box tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-
-        .output-box hr {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 1.5rem 0;
-        }
-
+        .output-box hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
         .output-box a { color: var(--accent); text-decoration: underline; }
         .output-box a:hover { color: white; }
+
+        /* Loading dots */
+        .loading-dots {
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .loading-dots span {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: blink 1.2s ease-in-out infinite;
+        }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 
         /* ── Animations ── */
         @keyframes spin      { to { transform: rotate(360deg); } }
         @keyframes fadeUp    { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse     { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes blink     { 0%,80%,100% { opacity: 0; transform: scale(0.7); } 40% { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -421,33 +350,25 @@
     <div class="card">
 
         <!-- Status Banner -->
-        {% if error_msg %}
-        <div class="status-banner {{ status_type }}">
-            {% if status_type == 'success' %}&#10003;
-            {% elif status_type == 'warning' %}&#9888;
-            {% else %}&#10007;{% endif %}
-            {{ error_msg }}
+        <div class="status-banner" id="statusBanner">
+            <span id="statusIcon"></span>
+            <span id="statusText"></span>
         </div>
-        {% endif %}
 
-        <!-- Input Form -->
-        <form method="POST" action="/" id="chatForm">
-            <label class="input-label" for="promptInput">Your Prompt</label>
-            <textarea
-                name="prompt"
-                id="promptInput"
-                placeholder="Ask me anything... Write code, explain concepts, create content, translate, summarize..."
-                required
-            >{{ user_prompt }}</textarea>
+        <!-- Input -->
+        <label class="input-label" for="promptInput">Your Prompt</label>
+        <textarea
+            id="promptInput"
+            placeholder="Ask me anything... Write code, explain concepts, create content, translate, summarize..."
+        ></textarea>
 
-            <div class="btn-row">
-                <button type="button" class="btn-clear" onclick="clearInput()">&#215; Clear</button>
-                <button type="submit" class="btn-send" id="sendBtn">
-                    <span id="btnLabel">&#9654;&nbsp; Send Prompt</span>
-                    <div class="spinner" id="spinner"></div>
-                </button>
-            </div>
-        </form>
+        <div class="btn-row">
+            <button type="button" class="btn-clear" onclick="clearInput()">&#215; Clear</button>
+            <button type="button" class="btn-send" id="sendBtn" onclick="sendPrompt()">
+                <span id="btnLabel">&#9654;&nbsp; Send Prompt</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+        </div>
 
         <!-- Quick Suggestions -->
         <div class="suggestions">
@@ -461,7 +382,6 @@
         </div>
 
         <!-- Output Section -->
-        {% if output %}
         <div class="output-section" id="outputSection">
             <div class="output-header">
                 <div class="output-label">AI Response</div>
@@ -469,41 +389,101 @@
                     &#128203; <span id="copyLabel">Copy</span>
                 </button>
             </div>
-            <!-- Raw text stored hidden for copy; rendered version shown -->
-            <div id="rawOutput" style="display:none">{{ output }}</div>
             <div class="output-box" id="outputBox"></div>
         </div>
-
-        <script>
-            // Render markdown
-            const raw = document.getElementById('rawOutput').textContent;
-            document.getElementById('outputBox').innerHTML = marked.parse(raw);
-
-            // Syntax highlight all code blocks and add language label
-            document.querySelectorAll('#outputBox pre code').forEach(block => {
-                hljs.highlightElement(block);
-                const lang = block.className.match(/language-(\w+)/);
-                if (lang) block.parentElement.setAttribute('data-lang', lang[1]);
-            });
-
-            // Scroll into view
-            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        </script>
-        {% endif %}
 
     </div>
 
     <script>
-        // Submit → show spinner
-        document.getElementById('chatForm').addEventListener('submit', function() {
-            document.getElementById('btnLabel').textContent = 'Thinking...';
-            document.getElementById('spinner').style.display = 'block';
-            document.getElementById('sendBtn').disabled = true;
-        });
+        let rawResponse = '';
+
+        async function sendPrompt() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) {
+                showStatus('warning', '&#9888;', 'Please enter a prompt first!');
+                return;
+            }
+
+            // UI: loading state
+            setLoading(true);
+            hideStatus();
+            showOutput(false);
+
+            try {
+                const response = await fetch('https://text.pollinations.ai/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [{ role: 'user', content: prompt }],
+                        model: 'openai',
+                        seed: Math.floor(Math.random() * 1000),
+                        private: true
+                    })
+                });
+
+                if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+                rawResponse = await response.text();
+
+                if (!rawResponse.trim()) throw new Error('Empty response from AI');
+
+                // Render markdown
+                document.getElementById('outputBox').innerHTML = marked.parse(rawResponse);
+
+                // Syntax highlight code blocks
+                document.querySelectorAll('#outputBox pre code').forEach(block => {
+                    hljs.highlightElement(block);
+                    const lang = block.className.match(/language-(\w+)/);
+                    if (lang) block.parentElement.setAttribute('data-lang', lang[1]);
+                });
+
+                showOutput(true);
+                showStatus('success', '&#10003;', 'Response generated successfully!');
+                document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (err) {
+                showStatus('error', '&#10007;', 'Error: ' + err.message + '. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        function setLoading(state) {
+            const btn    = document.getElementById('sendBtn');
+            const label  = document.getElementById('btnLabel');
+            const spin   = document.getElementById('spinner');
+            if (state) {
+                label.innerHTML = 'Thinking&nbsp;&nbsp;<span class="loading-dots"><span></span><span></span><span></span></span>';
+                spin.style.display = 'none';
+                btn.disabled = true;
+            } else {
+                label.innerHTML = '&#9654;&nbsp; Send Prompt';
+                spin.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+
+        function showStatus(type, icon, msg) {
+            const banner = document.getElementById('statusBanner');
+            banner.className = 'status-banner show ' + type;
+            document.getElementById('statusIcon').innerHTML = icon;
+            document.getElementById('statusText').textContent = msg;
+        }
+
+        function hideStatus() {
+            document.getElementById('statusBanner').className = 'status-banner';
+        }
+
+        function showOutput(state) {
+            const sec = document.getElementById('outputSection');
+            sec.className = 'output-section' + (state ? ' show' : '');
+        }
 
         function clearInput() {
             document.getElementById('promptInput').value = '';
             document.getElementById('promptInput').focus();
+            showOutput(false);
+            hideStatus();
         }
 
         function setPrompt(text) {
@@ -512,17 +492,16 @@
         }
 
         function copyOutput() {
-            const text  = document.getElementById('rawOutput').textContent;
             const label = document.getElementById('copyLabel');
-            navigator.clipboard.writeText(text).then(() => {
+            navigator.clipboard.writeText(rawResponse).then(() => {
                 label.textContent = 'Copied!';
                 setTimeout(() => { label.textContent = 'Copy'; }, 2000);
             });
         }
 
-        // Ctrl+Enter to submit
+        // Ctrl+Enter to send
         document.getElementById('promptInput').addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'Enter') document.getElementById('chatForm').submit();
+            if (e.ctrlKey && e.key === 'Enter') sendPrompt();
         });
     </script>
 </body>

@@ -1,14 +1,7 @@
-# Python
+# Python cache
 __pycache__/
 *.py[cod]
 *.pyo
-*.pyd
-.Python
-*.egg
-*.egg-info/
-dist/
-build/
-.eggs/
 
 # Virtual Environment
 venv/
@@ -24,15 +17,11 @@ instance/
 .vscode/
 .idea/
 *.swp
-*.swo
 
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Logs
-*.log
-
-# Test files (optional, comment out if you want to keep them)
-test_*.py
+# Git
+.git/
